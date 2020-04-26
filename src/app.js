@@ -21,6 +21,8 @@ app.use(express.json())
 //   });
 // });
 
+app.use('/api/v1', api);
+
 if (process.env.NODE_ENV === 'production') {
   // Set static folder
   app.use(express.static('client/build'));
@@ -30,7 +32,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 }
 
-app.use('/api/v1', api);
+
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);
