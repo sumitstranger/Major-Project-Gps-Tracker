@@ -1,77 +1,65 @@
-import React,{Component} from 'react';
+import React, { Component } from 'react';
 import './App.css';
 
- 
+import MessageCardForm from './Components/MessageCardForm';
+import { getMessages, getLocation, getLastLocation } from './Components/API';
+import MapComp from './Components/Map/MapComp';
 
-import MessageCardForm from './Components/MessageCardForm'
-import {getMessages,getLocation} from './Components/API'
-import MapComp from './Components/Map/MapComp'
-
-
-
-
-class App extends Component{
+class App extends Component {
   state = {
-    location:{
+    location: {
       lat: 51.50561254,
       lng: -0.09221545,
     },
-    haveUsersLocation:false,
+    haveUsersLocation: false,
     zoom: 2,
-    userMessage:{
-      name:'',
-      message:''
+    userMessage: {
+      name: '',
+      message: '',
     },
     sendingMessage: false,
-    sentMessage:false,
-    messages:[]
+    sentMessage: false,
+    messages: [],
+  };
+
+  componentDidMount() {
+    getMessages().then((messages) => {
+      console.log(messages);
+
+      this.setState({
+        messages,
+      });
+    });
+
+    getLastLocation().then((location) => {
+      this.setState({
+        location: {
+          lng: location.longitude,
+          lat: location.latitude,
+        },
+        haveUsersLocation: true,
+        zoom: 13,
+      });
+    });
   }
 
-  componentDidMount(){
+  render() {
+    return (
+      <div className='map'>
+        <MapComp
+          location={this.state.location}
+          zoom={this.state.zoom}
+          messages={this.state.messages}
+          haveUsersLocation={this.state.haveUsersLocation}
+        />
 
-    getMessages()
-        .then(messages=>{
-          console.log(messages);
-          
-          this.setState({
-            messages
-          })
-        })
-
-        getLocation()
-        .then(location => {
-          this.setState({
-            location,
-            haveUsersLocation: true,
-            zoom: 13
-          });
-        });
+        <MessageCardForm
+          sendingMessage={this.state.sendingMessage}
+          sentMessage={this.state.sentMessage}
+          haveUsersLocation={this.state.haveUsersLocation}
+        />
+      </div>
+    );
   }
-
-
- 
-
-render(){
-  
-  return (
-    <div className="map">
-
-      <MapComp 
-        location ={this.state.location}
-        zoom = {this.state.zoom}
-        messages={this.state.messages}
-        haveUsersLocation ={ this.state.haveUsersLocation}
-      />
-
-      <MessageCardForm 
-      sendingMessage={this.state.sendingMessage}
-      sentMessage={this.state.sentMessage}
-      haveUsersLocation={this.state.haveUsersLocation}
-      />
-    </div>
-  )
-}
-
 }
 export default App;
-
