@@ -27,7 +27,8 @@ const API_URL_Latest =
 //   }
 
 export function getLastLocation() {
-  return fetch(API_URL_Latest).then((res) => res.json());
+  const some = fetch(API_URL_Latest).then((res) => res.json());
+  return some;
 }
 
 export function getMessages() {

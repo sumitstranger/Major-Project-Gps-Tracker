@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 
 import MessageCardForm from './Components/MessageCardForm';
-import { getMessages, getLocation, getLastLocation } from './Components/API';
+import { getMessages, getLastLocation } from './Components/API';
 import MapComp from './Components/Map/MapComp';
 
 class App extends Component {
@@ -20,12 +20,11 @@ class App extends Component {
     sendingMessage: false,
     sentMessage: false,
     messages: [],
+    date: '',
   };
 
   componentDidMount() {
     getMessages().then((messages) => {
-      console.log(messages);
-
       this.setState({
         messages,
       });
@@ -37,8 +36,9 @@ class App extends Component {
           lng: location.longitude,
           lat: location.latitude,
         },
+        date: location.date.toString(),
         haveUsersLocation: true,
-        zoom: 13,
+        zoom: 16,
       });
     });
   }
@@ -57,6 +57,7 @@ class App extends Component {
           sendingMessage={this.state.sendingMessage}
           sentMessage={this.state.sentMessage}
           haveUsersLocation={this.state.haveUsersLocation}
+          date={this.state.date}
         />
       </div>
     );
